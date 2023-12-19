@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.tmkit</groupId>
+        <artifactId>tmkit-root</artifactId>
+        <version>0.0.2-SNAPSHOT</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>cn.tmkit.mq</groupId>
+    <artifactId>spring-boot-rocketmq5</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>spring-boot-starter-rocketmq5</module>
+        <module>spring-boot-rocketmq5-samples</module>
+    </modules>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <spring-boot.version>2.6.14</spring-boot.version>
+        <rocketmq-client-java.version>5.0.5</rocketmq-client-java.version>
+        <spring-boot-rocketmq-starter.version>0.0.1-SNAPSHOT</spring-boot-rocketmq-starter.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-client-java</artifactId>
+                <version>${rocketmq-client-java.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.tmkit.mq</groupId>
+                <artifactId>spring-boot-rocketmq-starter</artifactId>
+                <version>${spring-boot-rocketmq-starter.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+</project>

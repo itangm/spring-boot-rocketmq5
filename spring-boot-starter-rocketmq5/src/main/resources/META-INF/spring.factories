@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+cn.tmkit.mq.rocketmq5.boot.autoconfigure.RocketMQAutoConfiguration

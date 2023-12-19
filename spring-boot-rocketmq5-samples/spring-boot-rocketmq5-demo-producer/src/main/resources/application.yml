@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: rocketmq-spring-boot-example
+  rocketmq:
+    endpoints: 192.168.10.67:8181
+    producer:
+      bind-topics:
+        - tmkit-normal-topic2
+

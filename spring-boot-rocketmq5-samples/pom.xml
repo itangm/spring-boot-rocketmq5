@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.tmkit.mq</groupId>
+        <artifactId>spring-boot-rocketmq5</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>spring-boot-rocketmq5-samples</artifactId>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <demo.version>0.0.1-SNAPSHOT</demo.version>
+    </properties>
+
+    <modules>
+        <module>spring-boot-rocketmq5-demo-base</module>
+        <module>spring-boot-rocketmq5-demo-producer</module>
+        <module>spring-boot-rocketmq5-demo-consumer</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>cn.tmkit.mq</groupId>
+                <artifactId>spring-boot-starter-rocketmq5</artifactId>
+                <version>${demo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.tmkit.mq</groupId>
+                <artifactId>spring-boot-rocketmq5-demo-base</artifactId>
+                <version>${demo.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.tmkit.mq</groupId>
+            <artifactId>spring-boot-starter-rocketmq5</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>
