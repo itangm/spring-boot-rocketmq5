@@ -81,7 +81,7 @@ public class RocketMQMessageListenerBeanPostProcessor implements ApplicationCont
         container.setRocketMQMessageListener((RocketMQMessageListener<Object>) bean);
         container.setRocketMQMessageConsumer(annotation);
         container.setEndpoints(environment.resolvePlaceholders(annotation.endpoints()));
-        container.setConsumerGroup(environment.resolvePlaceholders(annotation.consumerGroup()));
+        container.setConsumerGroup(environment.resolvePlaceholders(annotation.group()));
         container.setConsumptionThreadCount(ConvertUtil.toInt(environment.resolvePlaceholders(annotation.consumptionThreadCount())));
         container.setTopic(environment.resolvePlaceholders(annotation.topic()));
         container.setFilterType(annotation.filterExpressionType());

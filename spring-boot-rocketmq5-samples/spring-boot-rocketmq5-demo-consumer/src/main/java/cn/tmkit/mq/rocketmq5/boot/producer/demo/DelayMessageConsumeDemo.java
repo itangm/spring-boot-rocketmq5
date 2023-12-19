@@ -2,13 +2,14 @@ package cn.tmkit.mq.rocketmq5.boot.producer.demo;
 
 import cn.tmkit.mq.rocketmq5.boot.consumer.annotation.RocketMQMessageConsumer;
 import cn.tmkit.mq.rocketmq5.boot.consumer.listener.RocketMQMessageListener;
+import cn.tmkit.mq.rocketmq5.boot.demo.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.apis.consumer.ConsumeResult;
 import org.apache.rocketmq.client.apis.message.MessageView;
 import org.springframework.stereotype.Component;
 
 /**
- * 常规消息的消费
+ * 延迟消息的消费
  *
  * @author ming.tang
  * @version 0.0.1
@@ -17,11 +18,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RocketMQMessageConsumer(
-        topic = "${spring.rocketmq.consumers.CommonMessageConsumeDemo.topic}",
-        filterExpression = "${spring.rocketmq.consumers.CommonMessageConsumeDemo.filter-expression}",
-        group = "${spring.rocketmq.consumers.CommonMessageConsumeDemo.group}"
+        topic = "${spring.rocketmq.consumers.DelayMessageConsumeDemo.topic}",
+        filterExpression = "${spring.rocketmq.consumers.DelayMessageConsumeDemo.filter-expression}",
+        group = "${spring.rocketmq.consumers.DelayMessageConsumeDemo.group}"
 )
-public class CommonMessageConsumeDemo implements RocketMQMessageListener<String> {
+public class DelayMessageConsumeDemo implements RocketMQMessageListener<OrderVO> {
 
     /**
      * 消费消息
@@ -30,7 +31,7 @@ public class CommonMessageConsumeDemo implements RocketMQMessageListener<String>
      * @param mv      消息视图
      */
     @Override
-    public ConsumeResult consume(String message, MessageView mv) {
+    public ConsumeResult consume(OrderVO message, MessageView mv) {
         String id = mv.getMessageId().toString();
         log.info("Printing message. id = {} ,body = {} ,properties = {} ,keys = {}", id, message, mv.getProperties(),
                 mv.getKeys());

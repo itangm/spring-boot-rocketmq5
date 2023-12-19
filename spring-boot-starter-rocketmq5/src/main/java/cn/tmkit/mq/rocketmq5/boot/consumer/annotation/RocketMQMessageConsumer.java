@@ -22,9 +22,10 @@ public @interface RocketMQMessageConsumer {
     String endpoints() default "${spring.rocketmq.endpoints:}";
 
     /**
-     * 消费者监听的主题名
+     * 消费者监听的主题名<br>
+     * <del>如果为空则查找配置<code>${spring.rocketmq.push-consumer.topics.类名}</code></del>
      */
-    String topic() default "${spring.rocketmq.push-consumer.topics.default-topic:}";
+    String topic();
 
     /**
      * 过滤表达式类型
@@ -37,9 +38,17 @@ public @interface RocketMQMessageConsumer {
     String filterExpression() default "*";
 
     /**
-     * 消费者分组的名称，用于区分不同的消费者分组。集群内全局唯一。更为详细请查看<a href="https://rocketmq.apache.org/zh/docs/domainModel/07consumergroup">消费者分组</a>
+     * 消费者分组的名称，用于区分不同的消费者分组。集群内全局唯一。更为详细请查看<a href="https://rocketmq.apache.org/zh/docs/domainModel/07consumergroup">消费者分组</a><br>
+     * <p>
+     * <del>
+     * 如果为空则查找配置<code>${spring.rocketmq.push-consumer.consumer-groups.类名}</code>
+     * </del>
+     * <del>
+     * 如果配置项未配置，默认生成的规则：topic + "-" + 类名
+     * </del>
+     * </p>
      */
-    String consumerGroup();
+    String group();
 
     /**
      * 线程池大小

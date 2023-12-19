@@ -173,7 +173,7 @@ public class DefaultRocketMQListenerContainer implements RocketMQListenerContain
         try {
             Asserts.notNull(rocketMQMessageConsumer, "Property 'rocketMQMessageConsumer' is required");
             Asserts.notEmpty(endpoints, "Property 'endpoints' is required");
-            Asserts.notEmpty(consumerGroup, "Property 'consumerGroup' is required");
+            Asserts.notEmpty(consumerGroup, "Property 'group' is required");
             Asserts.notEmpty(topic, "Property 'topic' is required");
 
             FilterExpression filterExpression = new FilterExpression(this.filterExpression, filterType);
@@ -192,7 +192,7 @@ public class DefaultRocketMQListenerContainer implements RocketMQListenerContain
                             Object message = rocketMQMessageSerializer.deserialize(NioUtil.readBytes(messageView.getBody()));
                             return rocketMQMessageListener.consume(message, messageView);
                         } catch (Exception e) {
-                            log.error("Message consumed exception endpoints = {} ,consumerGroup = {} ,topic = {}",
+                            log.error("Message consumed exception endpoints = {} ,group = {} ,topic = {}",
                                     endpoints, consumerGroup, topic, e);
                             throw new RuntimeException(e);
                         }

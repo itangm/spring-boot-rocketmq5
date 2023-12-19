@@ -18,8 +18,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RocketMQMessageConsumer(
-        filterExpression = "tag-order",
-        consumerGroup = "${spring.rocketmq.push-consumer.consumer-group.order}"
+        topic = "${spring.rocketmq.consumers.OrderMessageConsumeDemo.topic}",
+        filterExpression = "${spring.rocketmq.consumers.OrderMessageConsumeDemo.filter-expression}",
+        group = "${spring.rocketmq.consumers.OrderMessageConsumeDemo.group}"
 )
 public class OrderMessageConsumeDemo implements RocketMQMessageListener<OrderVO> {
 

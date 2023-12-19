@@ -4,6 +4,6 @@ spring:
   rocketmq:
     endpoints: 192.168.10.67:8181
     producer:
-      bind-topics:
-        - tmkit-normal-topic2
+      default-normal-topic: tmkit-normal-topic2
+      default-delay-topic: tmkit-delay-topic
 

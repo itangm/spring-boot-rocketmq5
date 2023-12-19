@@ -112,10 +112,6 @@ public class RocketMQAutoConfiguration implements InitializingBean, ApplicationC
         if (producerConfig == null) {
             log.warn("The necessary spring property '" + RocketMQProperties.PREFIX + ".producer' is not defined, all rocketmq beans creation are skipped!");
         } else {
-            List<String> bindTopics = producerConfig.getBindTopics();
-            if (Collections.isNotEmpty(bindTopics) && Strings.isEmpty(producerConfig.getDefaultTopic())) {
-                producerConfig.setDefaultTopic(bindTopics.get(0));
-            }
             if (Objects.isNull(producerConfig.getAccessKey())) {
                 producerConfig.setAccessKey(rocketMQProperties.getAccessKey());
             }
@@ -143,16 +139,13 @@ public class RocketMQAutoConfiguration implements InitializingBean, ApplicationC
     public Producer defaultRocketMQProducer(RocketMQProperties rocketMQProperties) throws ClientException {
         RocketMQProperties.Producer producerConfig = rocketMQProperties.getProducer();
         String endpoints = rocketMQProperties.getEndpoints();
-        String defaultTopic = producerConfig.getDefaultTopic();
         Assert.hasText(endpoints, RocketMQProperties.PREFIX + "[.endpoints] must not be null");
-        Assert.hasText(defaultTopic, RocketMQProperties.PREFIX + "[.producer.default-topic] must not be null");
 
         ClientServiceProvider clientServiceProvider = RocketMQUtils.getClientServiceProvider();
         ProducerBuilder producerBuilder = clientServiceProvider.newProducerBuilder();
-        // 绑定主题
-        if (Collections.isNotEmpty(producerConfig.getBindTopics())) {
-            producerConfig.getBindTopics().forEach(producerBuilder::setTopics);
-        }
+        // 预绑定主题列表
+        List<String> extBindTopics = Collections.newArrayList(producerConfig.getExtBindTopics());
+        Collections.addAll(extBindTopics, producerConfig.getDefaultNormalTopic(), producerConfig.getDefaultDelayTopic());
         Producer producer = producerBuilder.setMaxAttempts(producerConfig.getMaxAttempts())
                 // 客户端配置
                 .setClientConfiguration(RocketMQUtils.createClientConfiguration(rocketMQProperties.getEndpoints(),
@@ -180,7 +173,8 @@ public class RocketMQAutoConfiguration implements InitializingBean, ApplicationC
             rocketMQTemplate.setProducer(applicationContext.getBean(PRODUCER_BEAN_NAME, Producer.class));
         }
         rocketMQTemplate.setRocketMQMessageSerializer(rocketMQMessageSerializer);
-        rocketMQTemplate.setDefaultTopic(rocketMQProperties.getProducer().getDefaultTopic());
+        rocketMQTemplate.setDefaultNormalTopic(rocketMQProperties.getProducer().getDefaultNormalTopic());
+        rocketMQTemplate.setDefaultDelayTopic(rocketMQProperties.getProducer().getDefaultDelayTopic());
         rocketMQTemplate.setAsyncSendThreadPoolTaskExecutor(asyncSendThreadPoolTaskExecutor);
         return rocketMQTemplate;
     }
@@ -220,13 +214,18 @@ public class RocketMQAutoConfiguration implements InitializingBean, ApplicationC
 
     }
 
+    /**
+     * 属性检查的条件，决定是否加载
+     */
     static class OnRocketMQProducerPropertiesCondition implements Condition {
 
         @Override
         public boolean matches(@NotNull ConditionContext context, @NotNull AnnotatedTypeMetadata metadata) {
             Environment env = context.getEnvironment();
             String prefix = RocketMQProperties.PREFIX + ".producer";
-            return env.containsProperty(prefix + ".default-topic") || env.containsProperty(prefix + ".bind-topics[0]");
+            List<String> propertyNames = Collections.newArrayList(prefix + ".default-normal-topic",
+                    prefix + ".default-delay-topic");
+            return propertyNames.stream().anyMatch(env::containsProperty);
         }
 
     }

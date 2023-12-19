@@ -3,8 +3,10 @@ package cn.tmkit.mq.rocketmq5.boot.autoconfigure;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * RocketMQ的配置
@@ -54,7 +56,13 @@ public class RocketMQProperties {
     /**
      * 生产者的配置
      */
+    @NestedConfigurationProperty
     private Producer producer;
+
+    /**
+     * 消费者的配置，该配置仅用于提示的，系统未作处理
+     */
+    private Map<String, PushConsumer> consumers;
 
     /**
      * 生产者的配置
@@ -78,15 +86,19 @@ public class RocketMQProperties {
         private String secretKey;
 
         /**
-         * 绑定的主题列表
+         * 默认的普通主题，发送普通消息默认使用该主题
          */
-        private List<String> bindTopics;
+        private String defaultNormalTopic;
 
         /**
-         * 默认的主题，如果没有指定消息的topic，则会使用默认的主题。
-         * 如果不配置则采用{@linkplain #bindTopics}第一个主题作为默认主题
+         * 默认的延时消息主题，发送延时/定时消息默认使用该主题
          */
-        private String defaultTopic;
+        private String defaultDelayTopic;
+
+        /**
+         * 额外的预绑定主题列表，<a href="https://rocketmq.apache.org/zh/docs/domainModel/04producer#%E5%86%85%E9%83%A8%E5%B1%9E%E6%80%A7">官方建议提前绑定</a>
+         */
+        private List<String> extBindTopics;
 
         /**
          * 发送消息超时时间，单位毫秒
@@ -99,5 +111,44 @@ public class RocketMQProperties {
         private int maxAttempts = 3;
 
     }
+
+    /**
+     * 消费者的配置
+     */
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @ToString
+    @SuperBuilder
+    public static class PushConsumer {
+
+        /**
+         * 账户名
+         */
+        private String accessKey;
+
+        /**
+         * 账户密钥
+         */
+        private String secretKey;
+
+        /**
+         * 消费者订阅的主题
+         */
+        private String topic;
+
+        /**
+         * 消费者的消费组
+         */
+        private String group;
+
+        /**
+         * 消费者订阅的过滤表达式
+         */
+        private String filterExpression;
+
+    }
+
 
 }

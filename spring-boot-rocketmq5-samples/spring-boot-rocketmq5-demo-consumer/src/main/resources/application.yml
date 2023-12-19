@@ -3,10 +3,17 @@ spring:
     name: spring-boot-rocketmq5-demo-consumer
   rocketmq:
     endpoints: 192.168.10.67:8181
-    push-consumer:
-      topics:
-        default-topic: tmkit-normal-topic2
-      consumer-group:
-        order: CID-DEV-SPRING_BOOT_ROCKETMQ_5_DEMO_CONSUMER-ORDER_GROUP
-        common: CID-DEV-SPRING_BOOT_ROCKETMQ_5_DEMO_CONSUMER-COMMON_GROUP
+    consumers:
+      DelayMessageConsumeDemo:
+        topic: tmkit-delay-topic
+        group: CID-DEV-SPRING_BOOT_ROCKETMQ_5_DEMO_CONSUMER-DELAY_GROUP
+        filter-expression: tag-delay
+      OrderMessageConsumeDemo:
+        topic: tmkit-normal-topic2
+        group: CID-DEV-SPRING_BOOT_ROCKETMQ_5_DEMO_CONSUMER-ORDER_GROUP
+        filter-expression: tag-order
+      CommonMessageConsumeDemo:
+        topic: tmkit-normal-topic2
+        group: CID-DEV-SPRING_BOOT_ROCKETMQ_5_DEMO_CONSUMER-COMMON_GROUP
+        filter-expression: tag-common
 

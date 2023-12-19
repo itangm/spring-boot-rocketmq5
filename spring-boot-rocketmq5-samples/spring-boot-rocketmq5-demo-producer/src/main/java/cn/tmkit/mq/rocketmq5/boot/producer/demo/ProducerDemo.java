@@ -39,7 +39,7 @@ public class ProducerDemo implements CommandLineRunner {
 
     private void sendNormalForCommon() {
         // 普通消息 + 自定义属性
-        String topic = rocketMQProperties.getProducer().getDefaultTopic();
+        String topic = rocketMQProperties.getProducer().getDefaultNormalTopic();
         Object body = "mask coming.";
         String tag = "tag-common";
         Map<String, String> properties = Maps.of("appName", "spring-boot-rocketmq5-demo-producer");
@@ -50,7 +50,7 @@ public class ProducerDemo implements CommandLineRunner {
     private void sendNormalForOrderVO() {
         Long id = RandomUtil.nextLong();
         OrderVO orderVO = new OrderVO(id, LocalDateTimes.now(), BigDecimal.valueOf(RandomUtil.nextDouble()), "同步的的随便了");
-        String topic = rocketMQProperties.getProducer().getDefaultTopic();
+        String topic = rocketMQProperties.getProducer().getDefaultNormalTopic();
         String tag = "tag-order";
         SendResult sendResult = rocketMQTemplate.send(tag, orderVO, String.valueOf(id));
         log.info("Send order message success topic = {} ,key = {} ,body = {} ,sendResult = {}", topic, id, orderVO, sendResult);
@@ -59,10 +59,10 @@ public class ProducerDemo implements CommandLineRunner {
     private void asyncSendDelayMessage() {
         // 普通的消息
         OrderVO orderVO = new OrderVO(RandomUtil.nextLong(), LocalDateTimes.now(), BigDecimal.valueOf(RandomUtil.nextDouble()), "异步的，搞搞了");
-        String topic = rocketMQProperties.getProducer().getDefaultTopic();
-        String tag = "tag-order";
-        long timestamp = LocalDateTimes.toEpochMilli(LocalDateTimes.of(2023, 12, 19, 16, 6, 0));
-        rocketMQTemplate.asyncSendSchedule(tag, orderVO, timestamp, new SendCallback() {
+        String topic = rocketMQProperties.getProducer().getDefaultNormalTopic();
+        String tag = "tag-delay";
+        // 30s后消费
+        rocketMQTemplate.asyncSendDelaySeconds(tag, orderVO, 30, new SendCallback() {
             @Override
             public void onSuccess(SendResult sendResult) {
                 log.info("Async send normal message[{}] to topic[{}] result is {}", orderVO, topic, sendResult);
